@@ -7,6 +7,7 @@ function Chat() {
   const { requestId } = useParams();
   const { token, user } = useAuth();
 
+  const [loanRequest, setLoanRequest] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
   const [loading, setLoading] = useState(true);
@@ -14,19 +15,25 @@ function Chat() {
   const bottomRef = useRef(null);
 
   useEffect(() => {
-    fetchMessages();
+    fetchData();
   }, [requestId]);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
 
-  const fetchMessages = async () => {
+  const fetchData = async () => {
     try {
-      const res = await api.get(`/messages/${requestId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setMessages(res.data.messages);
+      const [requestRes, messagesRes] = await Promise.all([
+        api.get(`/requests/${requestId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+        api.get(`/messages/${requestId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        }),
+      ]);
+      setLoanRequest(requestRes.data.loanRequest);
+      setMessages(messagesRes.data.messages);
     } catch (err) {
       setError(err.response?.data?.error || 'Could not load chat');
     } finally {
@@ -54,10 +61,27 @@ function Chat() {
   if (loading) return <p className="text-gray-400 text-center mt-10">Loading...</p>;
   if (error) return <p className="text-red-400 text-center mt-10">{error}</p>;
 
+  const isBorrower = loanRequest.borrower._id === user.id;
+  const otherPerson = isBorrower ? loanRequest.owner : loanRequest.borrower;
+
   return (
     <div className="min-h-screen bg-gray-900 px-4 py-6 flex flex-col">
       <div className="max-w-lg w-full mx-auto flex flex-col flex-1 bg-gray-800 rounded-lg overflow-hidden">
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2" style={{ maxHeight: '60vh' }}>
+
+        <div className="p-4 border-b border-gray-700 flex justify-between items-center">
+          <div>
+            <p className="text-white font-medium">{otherPerson.name}</p>
+            <p className="text-gray-400 text-sm">{loanRequest.item.title}</p>
+          </div>
+          <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded capitalize">
+            {loanRequest.status.replace('_', ' ')}
+            {loanRequest.status === 'active' && loanRequest.dueDate && (
+              <> · Due {new Date(loanRequest.dueDate).toLocaleDateString()}</>
+            )}
+          </span>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2" style={{ maxHeight: '55vh' }}>
           {messages.length === 0 && (
             <p className="text-gray-500 text-sm text-center">No messages yet — say hi!</p>
           )}

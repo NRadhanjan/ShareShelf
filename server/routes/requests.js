@@ -80,7 +80,7 @@ router.get('/incoming', authMiddleware, async (req, res) => {
 // Owner approves or rejects a request
 router.patch('/:id/respond', authMiddleware, async (req, res) => {
   try {
-    const { action } = req.body; // 'approve' or 'reject'
+    const { action } = req.body;
 
     if (!['approve', 'reject'].includes(action)) {
       return res.status(400).json({ error: 'Action must be approve or reject' });
@@ -99,12 +99,25 @@ router.patch('/:id/respond', authMiddleware, async (req, res) => {
       return res.status(400).json({ error: 'This request has already been responded to' });
     }
 
-    loanRequest.status = action === 'approve' ? 'approved' : 'rejected';
-    await loanRequest.save();
-
     if (action === 'approve') {
+      const item = await Item.findById(loanRequest.item);
+      if (!item || item.status !== 'available') {
+        return res.status(400).json({ error: 'Item is no longer available' });
+      }
+
+      loanRequest.status = 'approved';
       await Item.findByIdAndUpdate(loanRequest.item, { status: 'requested' });
+
+      // Auto-reject all other pending requests for this item
+      await LoanRequest.updateMany(
+        { item: loanRequest.item, status: 'requested', _id: { $ne: loanRequest._id } },
+        { status: 'rejected' }
+      );
+    } else {
+      loanRequest.status = 'rejected';
     }
+
+    await loanRequest.save();
 
     res.json({ message: `Request ${loanRequest.status}`, loanRequest });
   } catch (err) {
@@ -202,5 +215,31 @@ router.patch('/:id/confirm-return', authMiddleware, async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 });
+
+// Get a single loan request by ID (only borrower or owner can view)
+router.get('/:id', authMiddleware, async (req, res) => {
+  try {
+    const loanRequest = await LoanRequest.findById(req.params.id)
+      .populate('item', 'title')
+      .populate('borrower', 'name')
+      .populate('owner', 'name');
+
+    if (!loanRequest) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    const isBorrower = loanRequest.borrower._id.toString() === req.userId;
+    const isOwner = loanRequest.owner._id.toString() === req.userId;
+    if (!isBorrower && !isOwner) {
+      return res.status(403).json({ error: 'You are not part of this loan' });
+    }
+
+    res.json({ loanRequest });
+  } catch (err) {
+    console.error('Get request error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
 
 module.exports = router;

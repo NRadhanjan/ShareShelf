@@ -13,13 +13,29 @@ function MyRequests() {
     fetchRequests();
   }, []);
 
-  const fetchRequests = async () => {
+    const fetchRequests = async () => {
     setLoading(true);
     try {
       const res = await api.get('/requests/my-requests', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setRequests(res.data.requests);
+
+      const statusPriority = {
+        requested: 1,
+        approved: 2,
+        pending_pickup: 2,
+        active: 3,
+        returned: 4,
+        rejected: 5,
+      };
+
+      const sorted = res.data.requests.sort((a, b) => {
+        const priorityDiff = statusPriority[a.status] - statusPriority[b.status];
+        if (priorityDiff !== 0) return priorityDiff;
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
+      setRequests(sorted);
     } catch (err) {
       setActionError('Could not load requests');
     } finally {
