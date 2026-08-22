@@ -50,4 +50,117 @@ router.post('/', authMiddleware, async (req, res) => {
   }
 });
 
+
+// Get requests where I'm the borrower
+router.get('/my-requests', authMiddleware, async (req, res) => {
+  try {
+    const requests = await LoanRequest.find({ borrower: req.userId })
+      .populate('item', 'title pricePerLoan')
+      .populate('owner', 'name email');
+    res.json({ requests });
+  } catch (err) {
+    console.error('Get my requests error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+// Get requests where I'm the owner (incoming requests on my items)
+router.get('/incoming', authMiddleware, async (req, res) => {
+  try {
+    const requests = await LoanRequest.find({ owner: req.userId })
+      .populate('item', 'title pricePerLoan')
+      .populate('borrower', 'name email');
+    res.json({ requests });
+  } catch (err) {
+    console.error('Get incoming requests error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+// Owner approves or rejects a request
+router.patch('/:id/respond', authMiddleware, async (req, res) => {
+  try {
+    const { action } = req.body; // 'approve' or 'reject'
+
+    if (!['approve', 'reject'].includes(action)) {
+      return res.status(400).json({ error: 'Action must be approve or reject' });
+    }
+
+    const loanRequest = await LoanRequest.findById(req.params.id);
+    if (!loanRequest) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    if (loanRequest.owner.toString() !== req.userId) {
+      return res.status(403).json({ error: 'Only the item owner can respond to this request' });
+    }
+
+    if (loanRequest.status !== 'requested') {
+      return res.status(400).json({ error: 'This request has already been responded to' });
+    }
+
+    loanRequest.status = action === 'approve' ? 'approved' : 'rejected';
+    await loanRequest.save();
+
+    if (action === 'approve') {
+      await Item.findByIdAndUpdate(loanRequest.item, { status: 'requested' });
+    }
+
+    res.json({ message: `Request ${loanRequest.status}`, loanRequest });
+  } catch (err) {
+    console.error('Respond to request error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
+// Confirm handover (either borrower or owner side)
+router.patch('/:id/confirm-handover', authMiddleware, async (req, res) => {
+  try {
+    const loanRequest = await LoanRequest.findById(req.params.id);
+    if (!loanRequest) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    if (loanRequest.status !== 'approved' && loanRequest.status !== 'pending_pickup') {
+      return res.status(400).json({ error: 'This loan is not ready for handover confirmation' });
+    }
+
+    const isBorrower = loanRequest.borrower.toString() === req.userId;
+    const isOwner = loanRequest.owner.toString() === req.userId;
+
+    if (!isBorrower && !isOwner) {
+      return res.status(403).json({ error: 'You are not part of this loan' });
+    }
+
+    if (isBorrower) {
+      loanRequest.borrowerConfirmedHandover = true;
+    }
+    if (isOwner) {
+      loanRequest.ownerConfirmedHandover = true;
+    }
+
+    // Move to pending_pickup once at least one side has confirmed
+    if (loanRequest.status === 'approved') {
+      loanRequest.status = 'pending_pickup';
+    }
+
+    // Once BOTH sides confirm, activate the loan
+    if (loanRequest.borrowerConfirmedHandover && loanRequest.ownerConfirmedHandover) {
+      loanRequest.status = 'active';
+      const dueDate = new Date();
+      dueDate.setDate(dueDate.getDate() + loanRequest.proposedDays);
+      loanRequest.dueDate = dueDate;
+
+      await Item.findByIdAndUpdate(loanRequest.item, { status: 'lent' });
+    }
+
+    await loanRequest.save();
+
+    res.json({ message: 'Handover confirmed', loanRequest });
+  } catch (err) {
+    console.error('Confirm handover error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
 module.exports = router;
