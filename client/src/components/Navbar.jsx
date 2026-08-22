@@ -17,6 +17,8 @@ function Navbar() {
       <div className="flex items-center gap-4">
         {user ? (
           <>
+            <Link to="/my-requests" className="text-gray-300 hover:text-white text-sm">My Requests</Link>
+            <Link to="/incoming" className="text-gray-300 hover:text-white text-sm">Requests</Link>
             <span className="text-gray-300 text-sm">Hi, {user.name}</span>
             <button
               onClick={handleLogout}
