@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import ItemDetail from './pages/ItemDetail';
 import IncomingRequests from './pages/IncomingRequests';
 import MyRequests from './pages/MyRequests';
+import CreateItem from './pages/CreateItem';
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/items/:id" element={<ItemDetail />} />
         <Route path="/incoming" element={<IncomingRequests />} />
         <Route path="/my-requests" element={<MyRequests />} />
+        <Route path="/create-item" element={<CreateItem />} />
       </Routes>
     </BrowserRouter>
   );

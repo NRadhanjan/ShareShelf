@@ -19,6 +19,7 @@ function Navbar() {
           <>
             <Link to="/my-requests" className="text-gray-300 hover:text-white text-sm">My Requests</Link>
             <Link to="/incoming" className="text-gray-300 hover:text-white text-sm">Requests</Link>
+            <Link to="/create-item" className="text-gray-300 hover:text-white text-sm">List Item</Link>
             <span className="text-gray-300 text-sm">Hi, {user.name}</span>
             <button
               onClick={handleLogout}
