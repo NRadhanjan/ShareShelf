@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function IncomingRequests() {
   const { token } = useAuth();
@@ -94,6 +95,9 @@ function IncomingRequests() {
                 <p className="text-gray-500 text-sm mt-1">
                   {r.proposedDays} days · ₹{r.agreedPrice}
                 </p>
+                <Link to={`/chat/${r._id}`} className="text-blue-400 text-xs hover:underline">
+                Open chat
+                </Link>
               </div>
               <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded capitalize">
                 {r.status.replace('_', ' ')}

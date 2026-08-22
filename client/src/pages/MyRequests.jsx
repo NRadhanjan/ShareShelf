@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 function MyRequests() {
   const { token } = useAuth();
@@ -80,6 +81,9 @@ function MyRequests() {
                 <p className="text-gray-500 text-sm mt-1">
                   {r.proposedDays} days · ₹{r.agreedPrice}
                 </p>
+                <Link to={`/chat/${r._id}`} className="text-blue-400 text-xs hover:underline">
+                Open chat
+                </Link>
                 {r.dueDate && (
                   <p className="text-gray-500 text-xs mt-1">
                     Due {new Date(r.dueDate).toLocaleDateString()}
