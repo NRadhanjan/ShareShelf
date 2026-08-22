@@ -40,6 +40,14 @@ const loanRequestSchema = new mongoose.Schema({
   dueDate: {
     type: Date,
   },
+  borrowerConfirmedReturn: {
+  type: Boolean,
+  default: false,
+  },
+  ownerConfirmedReturn: {
+  type: Boolean,
+  default: false,
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('LoanRequest', loanRequestSchema);

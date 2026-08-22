@@ -163,4 +163,44 @@ router.patch('/:id/confirm-handover', authMiddleware, async (req, res) => {
   }
 });
 
+// Confirm return (either borrower or owner side)
+router.patch('/:id/confirm-return', authMiddleware, async (req, res) => {
+  try {
+    const loanRequest = await LoanRequest.findById(req.params.id);
+    if (!loanRequest) {
+      return res.status(404).json({ error: 'Request not found' });
+    }
+
+    if (loanRequest.status !== 'active') {
+      return res.status(400).json({ error: 'This loan is not currently active' });
+    }
+
+    const isBorrower = loanRequest.borrower.toString() === req.userId;
+    const isOwner = loanRequest.owner.toString() === req.userId;
+
+    if (!isBorrower && !isOwner) {
+      return res.status(403).json({ error: 'You are not part of this loan' });
+    }
+
+    if (isBorrower) {
+      loanRequest.borrowerConfirmedReturn = true;
+    }
+    if (isOwner) {
+      loanRequest.ownerConfirmedReturn = true;
+    }
+
+    if (loanRequest.borrowerConfirmedReturn && loanRequest.ownerConfirmedReturn) {
+      loanRequest.status = 'returned';
+      await Item.findByIdAndUpdate(loanRequest.item, { status: 'available' });
+    }
+
+    await loanRequest.save();
+
+    res.json({ message: 'Return confirmed', loanRequest });
+  } catch (err) {
+    console.error('Confirm return error:', err);
+    res.status(500).json({ error: 'Something went wrong' });
+  }
+});
+
 module.exports = router;
