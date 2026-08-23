@@ -1,4 +1,3 @@
-```markdown
 # ShareShelf
 
 A peer-to-peer lending marketplace for VIT students — borrow and lend items like calculators, lab coats, and textbooks within campus. Built as a final-year project to explore full-stack authentication, a real state-machine-driven workflow, and in-app negotiation via chat.
@@ -71,5 +70,4 @@ Requires a `.env` file with `VITE_API_URL` pointing to the backend.
 - Chat updates via polling (every 3s), not WebSockets — acceptable for current scale, a reasonable v2 improvement
 - No image upload yet — items currently list without photos
 - No cross-app notifications — users only see new activity when they visit the relevant page
-```
 
