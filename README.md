@@ -70,3 +70,4 @@ Requires a `.env` file with `VITE_API_URL` pointing to the backend.
 - Chat updates via polling (every 3s), not WebSockets — acceptable for current scale, a reasonable v2 improvement
 - No image upload yet — items currently list without photos
 - No cross-app notifications — users only see new activity when they visit the relevant page
+
