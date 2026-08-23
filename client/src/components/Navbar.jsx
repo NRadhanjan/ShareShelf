@@ -25,9 +25,9 @@ function Navbar() {
             <Link to="/incoming" className="text-slate hover:text-teal text-sm font-medium">Requests</Link>
 
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
-              <span className="bg-mustard/20 text-ink text-sm font-medium px-3 py-1 rounded-full">
+              <Link to="/profile" className="bg-mustard/20 text-ink text-sm font-medium px-3 py-1 rounded-full">
                 {user.name}
-              </span>
+              </Link>
               <button
                 onClick={handleLogout}
                 className="text-slate hover:text-red-600 text-sm font-medium"

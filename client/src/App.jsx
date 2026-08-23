@@ -8,6 +8,7 @@ import IncomingRequests from './pages/IncomingRequests';
 import MyRequests from './pages/MyRequests';
 import CreateItem from './pages/CreateItem';
 import Chat from './pages/Chat';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/my-requests" element={<MyRequests />} />
         <Route path="/create-item" element={<CreateItem />} />
         <Route path="/chat/:requestId" element={<Chat />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </BrowserRouter>
   );
