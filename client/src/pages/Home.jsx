@@ -46,7 +46,7 @@ function Home() {
             placeholder="Search for calculators, lab coats, textbooks..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 rounded-lg border border-gray-300 bg-white text-ink placeholder-slate/60 focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-3 rounded-lg border border-gray-300 bg-white text-ink placeholder-slate/60 focus:outline-none focus:ring-2 focus:ring-teal"
           />
         </form>
 
@@ -65,17 +65,17 @@ function Home() {
             <Link
               key={item._id}
               to={`/items/${item._id}`}
-              className="bg-white border border-gray-200 rounded-xl p-5 hover:border-campus-blue hover:shadow-md transition"
+              className="bg-white border border-gray-200 rounded-xl p-5 hover:border-teal hover:shadow-md transition"
             >
               <div className="flex justify-between items-start mb-2">
                 <h2 className="text-ink font-semibold">{item.title}</h2>
-                <span className="bg-shelf-yellow/20 text-ink text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ml-2">
+                <span className="bg-mustard/20 text-ink text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ml-2">
                   Available
                 </span>
               </div>
               <p className="text-slate text-sm line-clamp-2">{item.description}</p>
               <div className="flex justify-between items-center mt-4 pt-3 border-t border-gray-100">
-                <span className="text-campus-blue font-semibold">₹{item.pricePerLoan}</span>
+                <span className="text-teal font-semibold">₹{item.pricePerLoan}</span>
                 <span className="text-slate text-xs">{item.maxLoanDays} days max</span>
               </div>
               <p className="text-slate text-xs mt-2">Listed by {item.owner.name}</p>
