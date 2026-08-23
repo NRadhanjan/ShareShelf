@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 function Signup() {
   const [name, setName] = useState('');
@@ -21,19 +20,8 @@ function Signup() {
     setLoading(true);
 
     try {
-      await api.post('/auth/signup', {
-        name,
-        email,
-        regNo,
-        password,
-      });
-
-      // Auto-login after successful signup
-      const loginRes = await api.post('/auth/login', {
-        email,
-        password,
-      });
-
+      await api.post('/auth/signup', { name, email, regNo, password });
+      const loginRes = await api.post('/auth/login', { email, password });
       login(loginRes.data.token, loginRes.data.user);
       navigate('/');
     } catch (err) {
@@ -44,59 +32,71 @@ function Signup() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-white mb-6">Sign up for ShareShelf</h1>
+    <div className="min-h-screen bg-paper flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-ink">Join ShareShelf</h1>
+          <p className="text-slate text-sm mt-1">Create your account to start lending and borrowing</p>
+        </div>
 
-        {error && (
-          <p className="bg-red-500/20 text-red-400 text-sm p-2 rounded mb-4">{error}</p>
-        )}
+        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-6">
+          {error && (
+            <p className="bg-red-50 text-red-600 text-sm p-2 rounded-lg mb-4">{error}</p>
+          )}
 
-        <input
-          type="text"
-          placeholder="Full name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="email"
-          placeholder="VIT email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="text"
-          placeholder="Registration number"
-          value={regNo}
-          onChange={(e) => setRegNo(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
-          required
-        />
+          <label className="text-ink text-sm font-medium block mb-1">Full name</label>
+          <input
+            type="text"
+            placeholder="Your name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded disabled:opacity-50"
-        >
-          {loading ? 'Signing up...' : 'Sign up'}
-        </button>
+          <label className="text-ink text-sm font-medium block mb-1">VIT email</label>
+          <input
+            type="email"
+            placeholder="you@vitstudent.ac.in"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
 
-        <p className="text-gray-400 text-sm mt-4 text-center">
-          Already have an account? <Link to="/login" className="text-blue-400">Log in</Link>
+          <label className="text-ink text-sm font-medium block mb-1">Registration number</label>
+          <input
+            type="text"
+            placeholder="21BCE1234"
+            value={regNo}
+            onChange={(e) => setRegNo(e.target.value)}
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
+
+          <label className="text-ink text-sm font-medium block mb-1">Password</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2.5 mb-5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+          >
+            {loading ? 'Signing up...' : 'Sign up'}
+          </button>
+        </form>
+
+        <p className="text-slate text-sm mt-4 text-center">
+          Already have an account? <Link to="/login" className="text-campus-blue font-medium">Log in</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }

@@ -8,8 +8,3 @@
   --color-shelf-yellow: #F5B92C;
   --color-slate: #5B6178;
 }
-
-body {
-  background-color: var(--color-paper);
-  color: var(--color-ink);
-}

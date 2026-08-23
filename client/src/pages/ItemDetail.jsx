@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 function ItemDetail() {
   const { id } = useParams();
-  const navigate = useNavigate();
   const { user, token } = useAuth();
 
   const [item, setItem] = useState(null);
@@ -53,81 +52,89 @@ function ItemDetail() {
     }
   };
 
-  if (loading) return <p className="text-gray-400 text-center mt-10">Loading...</p>;
-  if (error) return <p className="text-red-400 text-center mt-10">{error}</p>;
+  if (loading) return <p className="text-slate text-center mt-10">Loading...</p>;
+  if (error) return <p className="text-red-600 text-center mt-10">{error}</p>;
 
   const isOwner = user && item.owner._id === user.id;
 
   return (
-    <div className="min-h-screen bg-gray-900 px-6 py-8">
-      <div className="max-w-lg mx-auto bg-gray-800 rounded-lg p-6">
-        <h1 className="text-2xl font-bold text-white">{item.title}</h1>
-        <p className="text-gray-400 mt-2">{item.description}</p>
+    <div className="min-h-screen bg-paper px-4 py-10">
+      <div className="max-w-lg mx-auto">
+        <div className="bg-white border border-gray-200 rounded-xl p-6">
+          <div className="flex justify-between items-start mb-2">
+            <h1 className="text-2xl font-bold text-ink">{item.title}</h1>
+            <span className="bg-shelf-yellow/20 text-ink text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ml-2">
+              Available
+            </span>
+          </div>
+          <p className="text-slate mt-2">{item.description}</p>
 
-        <div className="flex justify-between items-center mt-4 text-sm">
-          <span className="text-blue-400 font-medium">₹{item.pricePerLoan} suggested</span>
-          <span className="text-gray-500">Max {item.maxLoanDays} days</span>
+          <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 text-sm">
+            <span className="text-campus-blue font-semibold">₹{item.pricePerLoan} suggested</span>
+            <span className="text-slate">Max {item.maxLoanDays} days</span>
+          </div>
+          <p className="text-slate text-sm mt-2">Listed by {item.owner.name}</p>
+
+          {!user && (
+            <p className="text-slate text-sm mt-6 bg-gray-50 p-3 rounded-lg">
+              Log in to request this item.
+            </p>
+          )}
+
+          {user && isOwner && (
+            <p className="text-slate text-sm mt-6 bg-gray-50 p-3 rounded-lg">
+              This is your own listing.
+            </p>
+          )}
+
+          {user && !isOwner && requestStatus !== 'success' && (
+            <form onSubmit={handleRequest} className="mt-6 border-t border-gray-100 pt-5">
+              <h2 className="text-ink font-semibold mb-3">Request to borrow</h2>
+
+              {requestStatus && requestStatus !== 'success' && (
+                <p className="bg-red-50 text-red-600 text-sm p-2 rounded-lg mb-3">
+                  {requestStatus}
+                </p>
+              )}
+
+              <label className="text-ink text-sm font-medium block mb-1">Days needed</label>
+              <input
+                type="number"
+                min="1"
+                max={item.maxLoanDays}
+                value={proposedDays}
+                onChange={(e) => setProposedDays(Number(e.target.value))}
+                className="w-full p-2.5 mb-3 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                required
+              />
+
+              <label className="text-ink text-sm font-medium block mb-1">Proposed price (₹)</label>
+              <input
+                type="number"
+                min="0"
+                value={agreedPrice}
+                onChange={(e) => setAgreedPrice(Number(e.target.value))}
+                className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                required
+              />
+
+              <button
+                type="submit"
+                disabled={requestLoading}
+                className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+              >
+                {requestLoading ? 'Sending request...' : 'Send request'}
+              </button>
+            </form>
+          )}
+
+          {requestStatus === 'success' && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-6">
+              <p className="text-green-700 font-medium text-sm">Request sent!</p>
+              <p className="text-green-600 text-sm mt-0.5">The owner will review it shortly.</p>
+            </div>
+          )}
         </div>
-        <p className="text-gray-500 text-sm mt-2">Listed by {item.owner.name}</p>
-
-        {!user && (
-          <p className="text-gray-400 text-sm mt-6">
-            Log in to request this item.
-          </p>
-        )}
-
-        {user && isOwner && (
-          <p className="text-gray-400 text-sm mt-6">
-            This is your own listing.
-          </p>
-        )}
-
-        {user && !isOwner && requestStatus !== 'success' && (
-          <form onSubmit={handleRequest} className="mt-6 border-t border-gray-700 pt-4">
-            <h2 className="text-white font-medium mb-3">Request to borrow</h2>
-
-            {requestStatus && requestStatus !== 'success' && (
-              <p className="bg-red-500/20 text-red-400 text-sm p-2 rounded mb-3">
-                {requestStatus}
-              </p>
-            )}
-
-            <label className="text-gray-400 text-sm block mb-1">Days needed</label>
-            <input
-              type="number"
-              min="1"
-              max={item.maxLoanDays}
-              value={proposedDays}
-              onChange={(e) => setProposedDays(Number(e.target.value))}
-              className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-              required
-            />
-
-            <label className="text-gray-400 text-sm block mb-1">Proposed price (₹)</label>
-            <input
-              type="number"
-              min="0"
-              value={agreedPrice}
-              onChange={(e) => setAgreedPrice(Number(e.target.value))}
-              className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
-              required
-            />
-
-            <button
-              type="submit"
-              disabled={requestLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded disabled:opacity-50"
-            >
-              {requestLoading ? 'Sending request...' : 'Send request'}
-            </button>
-          </form>
-        )}
-
-        {requestStatus === 'success' && (
-          <p className="bg-green-500/20 text-green-400 text-sm p-3 rounded mt-6">
-            Request sent! The owner will review it.
-          </p>
-        )}
       </div>
     </div>
   );

@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom';
+
+const statusStyles = {
+  requested: 'bg-shelf-yellow/20 text-ink',
+  approved: 'bg-campus-blue/10 text-campus-blue',
+  pending_pickup: 'bg-campus-blue/10 text-campus-blue',
+  active: 'bg-campus-blue text-white',
+  returned: 'bg-gray-100 text-slate',
+  rejected: 'bg-gray-100 text-slate',
+};
 
 function MyRequests() {
   const { token } = useAuth();
@@ -13,7 +22,7 @@ function MyRequests() {
     fetchRequests();
   }, []);
 
-    const fetchRequests = async () => {
+  const fetchRequests = async () => {
     setLoading(true);
     try {
       const res = await api.get('/requests/my-requests', {
@@ -71,65 +80,69 @@ function MyRequests() {
     }
   };
 
-  if (loading) return <p className="text-gray-400 text-center mt-10">Loading...</p>;
+  if (loading) return <p className="text-slate text-center mt-10">Loading...</p>;
 
   return (
-    <div className="min-h-screen bg-gray-900 px-6 py-8">
-      <h1 className="text-2xl font-bold text-white mb-6 max-w-lg mx-auto">My Requests</h1>
+    <div className="min-h-screen bg-paper px-6 py-10">
+      <div className="max-w-lg mx-auto">
+        <h1 className="text-2xl font-bold text-ink mb-1">My requests</h1>
+        <p className="text-slate text-sm mb-6">Items you've asked to borrow</p>
 
-      {actionError && (
-        <p className="bg-red-500/20 text-red-400 text-sm p-2 rounded mb-4 max-w-lg mx-auto">
-          {actionError}
-        </p>
-      )}
+        {actionError && (
+          <p className="bg-red-50 text-red-600 text-sm p-2 rounded-lg mb-4">{actionError}</p>
+        )}
 
-      {requests.length === 0 && (
-        <p className="text-gray-400 text-center">You haven't requested any items yet</p>
-      )}
-
-      <div className="max-w-lg mx-auto flex flex-col gap-4">
-        {requests.map((r) => (
-          <div key={r._id} className="bg-gray-800 rounded-lg p-4">
-            <div className="flex justify-between items-start">
-              <div>
-                <p className="text-white font-medium">{r.item.title}</p>
-                <p className="text-gray-400 text-sm">Owner: {r.owner.name}</p>
-                <p className="text-gray-500 text-sm mt-1">
-                  {r.proposedDays} days · ₹{r.agreedPrice}
-                </p>
-                <Link to={`/chat/${r._id}`} className="text-blue-400 text-xs hover:underline">
-                Open chat
-                </Link>
-                {r.dueDate && (
-                  <p className="text-gray-500 text-xs mt-1">
-                    Due {new Date(r.dueDate).toLocaleDateString()}
-                  </p>
-                )}
-              </div>
-              <span className="text-xs bg-gray-700 text-gray-300 px-2 py-1 rounded capitalize">
-                {r.status.replace('_', ' ')}
-              </span>
-            </div>
-
-            {(r.status === 'approved' || r.status === 'pending_pickup') && !r.borrowerConfirmedHandover && (
-              <button
-                onClick={() => confirmHandover(r._id)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm p-2 rounded mt-3"
-              >
-                Confirm handover & payment sent
-              </button>
-            )}
-
-            {r.status === 'active' && !r.borrowerConfirmedReturn && (
-              <button
-                onClick={() => confirmReturn(r._id)}
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm p-2 rounded mt-3"
-              >
-                Confirm item returned
-              </button>
-            )}
+        {requests.length === 0 && (
+          <div className="text-center py-16">
+            <p className="text-ink font-medium">No requests yet</p>
+            <p className="text-slate text-sm mt-1">Browse items to find something to borrow.</p>
           </div>
-        ))}
+        )}
+
+        <div className="flex flex-col gap-3">
+          {requests.map((r) => (
+            <div key={r._id} className="bg-white border border-gray-200 rounded-xl p-4">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-ink font-semibold">{r.item.title}</p>
+                  <p className="text-slate text-sm">Owner: {r.owner.name}</p>
+                  <p className="text-slate text-sm mt-1">
+                    {r.proposedDays} days · ₹{r.agreedPrice}
+                  </p>
+                  {r.dueDate && (
+                    <p className="text-slate text-xs mt-1">
+                      Due {new Date(r.dueDate).toLocaleDateString()}
+                    </p>
+                  )}
+                  <Link to={`/chat/${r._id}`} className="text-campus-blue text-xs font-medium hover:underline inline-block mt-1">
+                    Open chat
+                  </Link>
+                </div>
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full capitalize whitespace-nowrap ml-2 ${statusStyles[r.status]}`}>
+                  {r.status.replace('_', ' ')}
+                </span>
+              </div>
+
+              {(r.status === 'approved' || r.status === 'pending_pickup') && !r.borrowerConfirmedHandover && (
+                <button
+                  onClick={() => confirmHandover(r._id)}
+                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                >
+                  Confirm handover & payment sent
+                </button>
+              )}
+
+              {r.status === 'active' && !r.borrowerConfirmedReturn && (
+                <button
+                  onClick={() => confirmReturn(r._id)}
+                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                >
+                  Confirm item returned
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

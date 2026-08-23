@@ -29,43 +29,51 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-white mb-6">Log in to ShareShelf</h1>
+    <div className="min-h-screen bg-paper flex items-center justify-center px-4">
+      <div className="w-full max-w-sm">
+        <div className="mb-6 text-center">
+          <h1 className="text-2xl font-bold text-ink">Welcome back</h1>
+          <p className="text-slate text-sm mt-1">Log in to ShareShelf</p>
+        </div>
 
-        {error && (
-          <p className="bg-red-500/20 text-red-400 text-sm p-2 rounded mb-4">{error}</p>
-        )}
+        <form onSubmit={handleSubmit} className="bg-white border border-gray-200 rounded-xl p-6">
+          {error && (
+            <p className="bg-red-50 text-red-600 text-sm p-2 rounded-lg mb-4">{error}</p>
+          )}
 
-        <input
-          type="email"
-          placeholder="VIT email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-3 rounded bg-gray-700 text-white"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-4 rounded bg-gray-700 text-white"
-          required
-        />
+          <label className="text-ink text-sm font-medium block mb-1">VIT email</label>
+          <input
+            type="email"
+            placeholder="you@vitstudent.ac.in"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded disabled:opacity-50"
-        >
-          {loading ? 'Logging in...' : 'Log in'}
-        </button>
+          <label className="text-ink text-sm font-medium block mb-1">Password</label>
+          <input
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2.5 mb-5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            required
+          />
 
-        <p className="text-gray-400 text-sm mt-4 text-center">
-          Don't have an account? <Link to="/signup" className="text-blue-400">Sign up</Link>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+          >
+            {loading ? 'Logging in...' : 'Log in'}
+          </button>
+        </form>
+
+        <p className="text-slate text-sm mt-4 text-center">
+          Don't have an account? <Link to="/signup" className="text-campus-blue font-medium">Sign up</Link>
         </p>
-      </form>
+      </div>
     </div>
   );
 }
