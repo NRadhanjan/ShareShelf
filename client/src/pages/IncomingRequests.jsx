@@ -4,10 +4,10 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 const statusStyles = {
-  requested: 'bg-shelf-yellow/20 text-ink',
-  approved: 'bg-campus-blue/10 text-campus-blue',
-  pending_pickup: 'bg-campus-blue/10 text-campus-blue',
-  active: 'bg-campus-blue text-white',
+  requested: 'bg-mustard/20 text-ink',
+  approved: 'bg-teal/10 text-teal',
+  pending_pickup: 'bg-teal/10 text-teal',
+  active: 'bg-teal text-white',
   returned: 'bg-gray-100 text-slate',
   rejected: 'bg-gray-100 text-slate',
 };
@@ -123,7 +123,7 @@ function IncomingRequests() {
                   <p className="text-slate text-sm mt-1">
                     {r.proposedDays} days · ₹{r.agreedPrice}
                   </p>
-                  <Link to={`/chat/${r._id}`} className="text-campus-blue text-xs font-medium hover:underline inline-block mt-1">
+                  <Link to={`/chat/${r._id}`} className="text-teal text-xs font-medium hover:underline inline-block mt-1">
                     Open chat
                   </Link>
                 </div>
@@ -136,7 +136,7 @@ function IncomingRequests() {
                 <div className="flex gap-2 mt-3">
                   <button
                     onClick={() => respond(r._id, 'approve')}
-                    className="flex-1 bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg transition"
+                    className="flex-1 bg-teal hover:bg-teal-dark text-white text-sm font-medium p-2 rounded-lg transition"
                   >
                     Approve
                   </button>
@@ -152,7 +152,7 @@ function IncomingRequests() {
               {(r.status === 'approved' || r.status === 'pending_pickup') && !r.ownerConfirmedHandover && (
                 <button
                   onClick={() => confirmHandover(r._id)}
-                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                  className="w-full bg-teal hover:bg-teal-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
                 >
                   Confirm handover & payment received
                 </button>
@@ -161,7 +161,7 @@ function IncomingRequests() {
               {r.status === 'active' && !r.ownerConfirmedReturn && (
                 <button
                   onClick={() => confirmReturn(r._id)}
-                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                  className="w-full bg-teal hover:bg-teal-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
                 >
                   Confirm item returned
                 </button>

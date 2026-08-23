@@ -13,19 +13,19 @@ function Navbar() {
   return (
     <nav className="bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
       <Link to="/" className="flex items-center gap-1.5 font-bold text-lg text-ink">
-        Share<span className="text-campus-blue">Shelf</span>
+        Share<span className="text-teal">Shelf</span>
       </Link>
 
       <div className="flex items-center gap-5">
         {user ? (
           <>
-            <Link to="/" className="text-slate hover:text-campus-blue text-sm font-medium">Browse</Link>
-            <Link to="/create-item" className="text-slate hover:text-campus-blue text-sm font-medium">List an item</Link>
-            <Link to="/my-requests" className="text-slate hover:text-campus-blue text-sm font-medium">My requests</Link>
-            <Link to="/incoming" className="text-slate hover:text-campus-blue text-sm font-medium">Requests</Link>
+            <Link to="/" className="text-slate hover:text-teal text-sm font-medium">Browse</Link>
+            <Link to="/create-item" className="text-slate hover:text-teal text-sm font-medium">List an item</Link>
+            <Link to="/my-requests" className="text-slate hover:text-teal text-sm font-medium">My requests</Link>
+            <Link to="/incoming" className="text-slate hover:text-teal text-sm font-medium">Requests</Link>
 
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
-              <span className="bg-shelf-yellow/20 text-ink text-sm font-medium px-3 py-1 rounded-full">
+              <span className="bg-mustard/20 text-ink text-sm font-medium px-3 py-1 rounded-full">
                 {user.name}
               </span>
               <button
@@ -38,10 +38,10 @@ function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" className="text-slate hover:text-campus-blue text-sm font-medium">Log in</Link>
+            <Link to="/login" className="text-slate hover:text-teal text-sm font-medium">Log in</Link>
             <Link
               to="/signup"
-              className="bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium px-4 py-2 rounded-lg"
+              className="bg-teal hover:bg-teal-dark text-white text-sm font-medium px-4 py-2 rounded-lg"
             >
               Sign up
             </Link>

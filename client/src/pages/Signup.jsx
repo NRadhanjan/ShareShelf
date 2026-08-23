@@ -50,7 +50,7 @@ function Signup() {
             placeholder="Your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
             required
           />
 
@@ -60,7 +60,7 @@ function Signup() {
             placeholder="you@vitstudent.ac.in"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
             required
           />
 
@@ -70,7 +70,7 @@ function Signup() {
             placeholder="21BCE1234"
             value={regNo}
             onChange={(e) => setRegNo(e.target.value)}
-            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
             required
           />
 
@@ -80,21 +80,21 @@ function Signup() {
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2.5 mb-5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-2.5 mb-5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
             required
           />
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+            className="w-full bg-teal hover:bg-teal-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
           >
             {loading ? 'Signing up...' : 'Sign up'}
           </button>
         </form>
 
         <p className="text-slate text-sm mt-4 text-center">
-          Already have an account? <Link to="/login" className="text-campus-blue font-medium">Log in</Link>
+          Already have an account? <Link to="/login" className="text-teal font-medium">Log in</Link>
         </p>
       </div>
     </div>

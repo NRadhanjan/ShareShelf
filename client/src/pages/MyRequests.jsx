@@ -4,10 +4,10 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 const statusStyles = {
-  requested: 'bg-shelf-yellow/20 text-ink',
-  approved: 'bg-campus-blue/10 text-campus-blue',
-  pending_pickup: 'bg-campus-blue/10 text-campus-blue',
-  active: 'bg-campus-blue text-white',
+  requested: 'bg-mustard/20 text-ink',
+  approved: 'bg-teal/10 text-teal',
+  pending_pickup: 'bg-teal/10 text-teal',
+  active: 'bg-teal text-white',
   returned: 'bg-gray-100 text-slate',
   rejected: 'bg-gray-100 text-slate',
 };
@@ -114,7 +114,7 @@ function MyRequests() {
                       Due {new Date(r.dueDate).toLocaleDateString()}
                     </p>
                   )}
-                  <Link to={`/chat/${r._id}`} className="text-campus-blue text-xs font-medium hover:underline inline-block mt-1">
+                  <Link to={`/chat/${r._id}`} className="text-teal text-xs font-medium hover:underline inline-block mt-1">
                     Open chat
                   </Link>
                 </div>
@@ -126,7 +126,7 @@ function MyRequests() {
               {(r.status === 'approved' || r.status === 'pending_pickup') && !r.borrowerConfirmedHandover && (
                 <button
                   onClick={() => confirmHandover(r._id)}
-                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                  className="w-full bg-teal hover:bg-teal-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
                 >
                   Confirm handover & payment sent
                 </button>
@@ -135,7 +135,7 @@ function MyRequests() {
               {r.status === 'active' && !r.borrowerConfirmedReturn && (
                 <button
                   onClick={() => confirmReturn(r._id)}
-                  className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
+                  className="w-full bg-teal hover:bg-teal-dark text-white text-sm font-medium p-2 rounded-lg mt-3 transition"
                 >
                   Confirm item returned
                 </button>

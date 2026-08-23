@@ -63,14 +63,14 @@ function ItemDetail() {
         <div className="bg-white border border-gray-200 rounded-xl p-6">
           <div className="flex justify-between items-start mb-2">
             <h1 className="text-2xl font-bold text-ink">{item.title}</h1>
-            <span className="bg-shelf-yellow/20 text-ink text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ml-2">
+            <span className="bg-mustard/20 text-ink text-xs font-medium px-2 py-1 rounded-full whitespace-nowrap ml-2">
               Available
             </span>
           </div>
           <p className="text-slate mt-2">{item.description}</p>
 
           <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-100 text-sm">
-            <span className="text-campus-blue font-semibold">₹{item.pricePerLoan} suggested</span>
+            <span className="text-teal font-semibold">₹{item.pricePerLoan} suggested</span>
             <span className="text-slate">Max {item.maxLoanDays} days</span>
           </div>
           <p className="text-slate text-sm mt-2">Listed by {item.owner.name}</p>
@@ -104,7 +104,7 @@ function ItemDetail() {
                 max={item.maxLoanDays}
                 value={proposedDays}
                 onChange={(e) => setProposedDays(Number(e.target.value))}
-                className="w-full p-2.5 mb-3 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                className="w-full p-2.5 mb-3 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
                 required
               />
 
@@ -114,14 +114,14 @@ function ItemDetail() {
                 min="0"
                 value={agreedPrice}
                 onChange={(e) => setAgreedPrice(Number(e.target.value))}
-                className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
                 required
               />
 
               <button
                 type="submit"
                 disabled={requestLoading}
-                className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+                className="w-full bg-teal hover:bg-teal-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
               >
                 {requestLoading ? 'Sending request...' : 'Send request'}
               </button>

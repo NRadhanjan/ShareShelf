@@ -60,7 +60,7 @@ function CreateItem() {
             placeholder="e.g. Scientific Calculator"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
             required
           />
 
@@ -69,7 +69,7 @@ function CreateItem() {
             placeholder="Condition, model, anything a borrower should know"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue resize-none"
+            className="w-full p-2.5 mb-4 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal resize-none"
             rows="3"
             required
           />
@@ -83,7 +83,7 @@ function CreateItem() {
                 placeholder="40"
                 value={pricePerLoan}
                 onChange={(e) => setPricePerLoan(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                className="w-full p-2.5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
                 required
               />
             </div>
@@ -95,7 +95,7 @@ function CreateItem() {
                 placeholder="3"
                 value={maxLoanDays}
                 onChange={(e) => setMaxLoanDays(e.target.value)}
-                className="w-full p-2.5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-campus-blue"
+                className="w-full p-2.5 rounded-lg border border-gray-300 bg-white text-ink focus:outline-none focus:ring-2 focus:ring-teal"
                 required
               />
             </div>
@@ -104,7 +104,7 @@ function CreateItem() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-campus-blue hover:bg-campus-blue-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
+            className="w-full bg-teal hover:bg-teal-dark text-white font-medium p-2.5 rounded-lg disabled:opacity-50 transition"
           >
             {loading ? 'Listing...' : 'List item'}
           </button>

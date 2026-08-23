@@ -4,10 +4,10 @@ import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
 const statusStyles = {
-  requested: 'bg-shelf-yellow/20 text-ink',
-  approved: 'bg-campus-blue/10 text-campus-blue',
-  pending_pickup: 'bg-campus-blue/10 text-campus-blue',
-  active: 'bg-campus-blue text-white',
+  requested: 'bg-mustard/20 text-ink',
+  approved: 'bg-teal/10 text-teal',
+  pending_pickup: 'bg-teal/10 text-teal',
+  active: 'bg-teal text-white',
   returned: 'bg-gray-100 text-slate',
   rejected: 'bg-gray-100 text-slate',
 };
@@ -118,7 +118,7 @@ function Chat() {
                 key={m._id}
                 className={`max-w-[75%] p-2.5 rounded-lg text-sm ${
                   isMe
-                    ? 'self-end bg-campus-blue text-white'
+                    ? 'self-end bg-teal text-white'
                     : 'self-start bg-white border border-gray-200 text-ink'
                 }`}
               >
@@ -135,11 +135,11 @@ function Chat() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Type a message"
-            className="flex-1 p-2.5 rounded-lg border border-gray-300 bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-campus-blue"
+            className="flex-1 p-2.5 rounded-lg border border-gray-300 bg-white text-ink text-sm focus:outline-none focus:ring-2 focus:ring-teal"
           />
           <button
             type="submit"
-            className="bg-campus-blue hover:bg-campus-blue-dark text-white px-4 rounded-lg text-sm font-medium transition"
+            className="bg-teal hover:bg-teal-dark text-white px-4 rounded-lg text-sm font-medium transition"
           >
             Send
           </button>
